@@ -46,3 +46,6 @@ Bot: Sam Altman is the CEO of OpenAI.
 You: where sam Altman studied?
 
 Bot: Sam Altman studied computer science at Stanford University.
+
+# App Link:- https://soulpage-genai-assignment2-rohit-s2q4ybtsypa8axk6mmrsyd.streamlit.app/
+# Github Repo Link:- https://github.com/RohitRathore25/soulpage-genai-assignment2-rohit
