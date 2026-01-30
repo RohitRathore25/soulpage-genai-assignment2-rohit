@@ -1,9 +1,8 @@
 import os
 from langchain_google_genai import ChatGoogleGenerativeAI
-from langchain_core.prompts import ChatPromptTemplate
-import google.generativeai as genai
 from tools import web_search
-from memory import get_memory
+import google.generativeai as genai
+
 
 
 SERPAPI_KEY = os.getenv("SERP_API")
@@ -15,46 +14,44 @@ genai.configure(api_key=GEMINI_API_KEY)
 model = genai.GenerativeModel('gemini-2.5-flash-lite',
                               generation_config={'temperature':0.2})
 
+# Manual conversation memory
+conversation_history = []
 
+def run_bot(user_input: str) -> str:
+    global conversation_history
 
-def run_bot(user_question: str, memory):
-    """
-    Runs the conversational knowledge bot
-    """
+    # Convert history into text
+    history_text = ""
+    for user, bot in conversation_history:
+        history_text += f"User: {user}\nBot: {bot}\n"
 
-    # Fetch external knowledge
-    context = web_search(user_question)
+    # External search context
+    context = web_search(user_input)
 
-    # Prompt with memory + context
-    prompt = ChatPromptTemplate.from_template("""
-    You are a factual and helpful assistant.
+    prompt = f"""
+<Role>
+You are a conversational knowledge assistant.
 
-    External Knowledge:
-    {context}
+<Context>
+Conversation History:
+{history_text}
 
-    Conversation History:
-    {chat_history}
+External Knowledge:
+{context}
 
-    User Question:
-    {question}
+<User Question>
+{user_input}
 
-    Answer clearly and concisely.
-    """)
-    
-    
-    messages = prompt.format_messages(
-        context=context,
-        chat_history=memory.chat_memory.messages,
-        question=user_question
-    )
+<Instructions>
+- Answer factually and clearly
+- Use prior conversation context if relevant
+- Keep responses concise
+"""
 
+    response = model.invoke(prompt).content
 
-    response = model.predict(messages[0].content)
-
-    # Save conversation to memory
-    memory.save_context(
-        {"input": user_question},
-        {"output": response}
-    )
+    # Save to memory
+    conversation_history.append((user_input, response))
 
     return response
+
