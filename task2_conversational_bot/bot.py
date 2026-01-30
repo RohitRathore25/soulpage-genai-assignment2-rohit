@@ -27,7 +27,8 @@ def run_bot(user_input: str) -> str:
 
     # External search context
     context = web_search(user_input)
-
+    
+    
     prompt = f"""
 <Role>
 You are a conversational knowledge assistant.
@@ -48,7 +49,7 @@ External Knowledge:
 - Keep responses concise
 """
 
-    response = model.invoke(prompt).content
+    response = model.generate_content(prompt).text
 
     # Save to memory
     conversation_history.append((user_input, response))
