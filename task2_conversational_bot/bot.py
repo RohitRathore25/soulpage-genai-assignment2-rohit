@@ -1,5 +1,4 @@
 import os
-from langchain_google_genai import ChatGoogleGenerativeAI
 from tools import web_search
 import google.generativeai as genai
 
