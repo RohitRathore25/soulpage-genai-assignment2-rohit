@@ -39,4 +39,10 @@ Once deployed, users can interact with the bot through a live chat interface.
 
 ### Sample Chat Log
 
+You: who is ceo of OpenAI
 
+Bot: Sam Altman is the CEO of OpenAI.
+
+You: where sam Altman studied?
+
+Bot: Sam Altman studied computer science at Stanford University.
